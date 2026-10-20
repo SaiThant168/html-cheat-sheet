@@ -1,0 +1,369 @@
+<!DOCTYPE html>
+<html lang="my">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>HTML Elements Interactive Cheat Sheet</title>
+    <!-- Tailwind CSS CDN -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <!-- FontAwesome for Icons -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <!-- Google Fonts (Padauk for Myanmar font support) -->
+    <link href="https://fonts.googleapis.com/css2?family=Padauk:wght@400;700&family=Plus+Jakarta+Sans:wght@400;600;700&display=swap" rel="stylesheet">
+    <script>
+        tailwind.config = {
+            darkMode: 'class',
+            theme: {
+                extend: {
+                    fontFamily: {
+                        sans: ['Plus Jakarta Sans', 'Padauk', 'sans-serif'],
+                    }
+                }
+            }
+        }
+    </script>
+</head>
+<body class="bg-slate-50 dark:bg-slate-900 text-slate-800 dark:text-slate-100 min-h-screen flex flex-col transition-colors duration-200">
+
+    <!-- Header -->
+    <header class="sticky top-0 z-30 bg-white/80 dark:bg-slate-900/80 backdrop-blur-md border-b border-slate-200 dark:border-slate-800">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-4 flex flex-wrap justify-between items-center gap-4">
+            <div class="flex items-center space-x-3">
+                <div class="bg-gradient-to-tr from-orange-500 to-amber-500 text-white p-2.5 rounded-xl shadow-lg shadow-orange-500/20">
+                    <i class="fa-brands fa-html5 text-2xl"></i>
+                </div>
+                <div>
+                    <h1 class="text-xl font-bold bg-gradient-to-r from-orange-500 to-amber-500 bg-clip-text text-transparent">HTML Cheat Sheet</h1>
+                    <p class="text-xs text-slate-500 dark:text-slate-400">စနစ်တကျ မှတ်သားပြီး အသစ်ထည့်သွင်းနိုင်သော Interactive Dashboard</p>
+                </div>
+            </div>
+
+            <!-- Header Actions -->
+            <div class="flex items-center space-x-3">
+                <button id="addTagBtn" class="bg-orange-500 hover:bg-orange-600 text-white font-medium px-4 py-2 rounded-xl text-sm transition shadow-sm flex items-center space-x-2">
+                    <i class="fa-solid fa-plus"></i>
+                    <span>Tag အသစ်ထည့်ရန်</span>
+                </button>
+                <button id="themeToggle" class="p-2.5 rounded-xl border border-slate-200 dark:border-slate-700 bg-slate-100 dark:bg-slate-800 text-slate-600 dark:text-slate-300 hover:bg-slate-200 dark:hover:bg-slate-700 transition">
+                    <i class="fa-solid fa-moon dark:hidden"></i>
+                    <i class="fa-solid fa-sun hidden dark:inline"></i>
+                </button>
+            </div>
+        </div>
+    </header>
+
+    <!-- Main Container -->
+    <main class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8 flex-1 w-full">
+        <!-- Search & Filter Section -->
+        <div class="flex flex-col md:flex-row gap-4 mb-8">
+            <div class="relative flex-1">
+                <i class="fa-solid fa-magnifying-glass absolute left-4 top-1/2 -translate-y-1/2 text-slate-400"></i>
+                <input type="text" id="searchInput" placeholder="Tag အမည် သို့မဟုတ် အဓိပ္ပာယ်ဖြင့် ရှာရန်..." class="w-full pl-11 pr-4 py-3 bg-white dark:bg-slate-800 border border-slate-200 dark:border-slate-700 rounded-xl focus:outline-none focus:ring-2 focus:ring-orange-500/50 shadow-sm transition text-sm">
+            </div>
+            <div class="flex gap-2 overflow-x-auto pb-2 md:pb-0 scrollbar-none" id="categoryFilters">
+                <!-- Filter buttons rendered via JS -->
+            </div>
+        </div>
+
+        <!-- Tags Grid -->
+        <div id="tagsGrid" class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+            <!-- Cards inserted dynamically -->
+        </div>
+
+        <!-- Empty State -->
+        <div id="emptyState" class="hidden text-center py-16">
+            <i class="fa-regular fa-folder-open text-5xl text-slate-300 dark:text-slate-600 mb-3"></i>
+            <p class="text-slate-500 dark:text-slate-400 text-base">ရှာဖွေမှုနှင့် ကိုက်ညီသော HTML Tag မတွေ့ရှိပါ</p>
+        </div>
+    </main>
+
+    <!-- Add/Edit Modal -->
+    <div id="tagModal" class="fixed inset-0 bg-slate-900/50 backdrop-blur-sm z-50 flex items-center justify-center hidden p-4">
+        <div class="bg-white dark:bg-slate-800 rounded-2xl max-w-lg w-full p-6 shadow-2xl border border-slate-100 dark:border-slate-700 transform transition-all">
+            <div class="flex justify-between items-center mb-6">
+                <h3 class="text-lg font-bold text-slate-800 dark:text-slate-100" id="modalTitle">Tag အသစ်ဖြည့်သွင်းရန်</h3>
+                <button id="closeModal" class="text-slate-400 hover:text-slate-600 dark:hover:text-slate-200">
+                    <i class="fa-solid fa-xmark text-xl"></i>
+                </button>
+            </div>
+            
+            <form id="tagForm" class="space-y-4">
+                <input type="hidden" id="tagId">
+                <div>
+                    <label class="block text-xs font-semibold text-slate-600 dark:text-slate-400 mb-1">Tag အမည် (ဥပမာ - &lt;p&gt;)</label>
+                    <input type="text" id="tagName" required placeholder="<tag_name>" class="w-full px-3 py-2 bg-slate-50 dark:bg-slate-900 border border-slate-200 dark:border-slate-700 rounded-lg focus:outline-none focus:ring-2 focus:ring-orange-500 text-sm">
+                </div>
+
+                <div>
+                    <label class="block text-xs font-semibold text-slate-600 dark:text-slate-400 mb-1">အမျိုးအစား (Category)</label>
+                    <select id="tagCategory" class="w-full px-3 py-2 bg-slate-50 dark:bg-slate-900 border border-slate-200 dark:border-slate-700 rounded-lg focus:outline-none focus:ring-2 focus:ring-orange-500 text-sm">
+                        <option value="Structure">Structure (ဖွဲ့စည်းပုံ)</option>
+                        <option value="Text">Text (စာသား)</option>
+                        <option value="Media">Media (လင့်/ဓာတ်ပုံ/ဗီဒီယို)</option>
+                        <option value="Form">Form & Input (ဖောင်)</option>
+                        <option value="List & Table">List & Table (ဇယား/စာရင်း)</option>
+                    </select>
+                </div>
+
+                <div>
+                    <label class="block text-xs font-semibold text-slate-600 dark:text-slate-400 mb-1">လုပ်ဆောင်ချက် / ရှင်းလင်းချက်</label>
+                    <textarea id="tagDesc" required rows="2" placeholder="Tag ၏ အသုံးပြုပုံ အတိုချုံး..." class="w-full px-3 py-2 bg-slate-50 dark:bg-slate-900 border border-slate-200 dark:border-slate-700 rounded-lg focus:outline-none focus:ring-2 focus:ring-orange-500 text-sm"></textarea>
+                </div>
+
+                <div>
+                    <label class="block text-xs font-semibold text-slate-600 dark:text-slate-400 mb-1">Code နမူနာ (Example)</label>
+                    <textarea id="tagCode" rows="2" placeholder="<h1>Hello</h1>" class="w-full px-3 py-2 font-mono text-xs bg-slate-900 text-slate-100 border border-slate-700 rounded-lg focus:outline-none focus:ring-2 focus:ring-orange-500"></textarea>
+                </div>
+
+                <div class="flex justify-end space-x-3 pt-4">
+                    <button type="button" id="cancelBtn" class="px-4 py-2 border border-slate-200 dark:border-slate-700 rounded-xl text-slate-600 dark:text-slate-300 hover:bg-slate-100 dark:hover:bg-slate-700 text-sm font-medium">မလုပ်တော့ပါ</button>
+                    <button type="submit" class="px-4 py-2 bg-orange-500 hover:bg-orange-600 text-white rounded-xl text-sm font-medium shadow-sm">သိမ်းဆည်းမည်</button>
+                </div>
+            </form>
+        </div>
+    </div>
+
+    <!-- Notification Toast -->
+    <div id="toast" class="fixed bottom-5 right-5 bg-slate-800 text-white px-4 py-3 rounded-xl shadow-xl flex items-center space-x-3 translate-y-20 opacity-0 transition-all duration-300 z-50">
+        <i class="fa-solid fa-circle-check text-green-400"></i>
+        <span id="toastMsg" class="text-sm"></span>
+    </div>
+
+    <script>
+        // Default Dataset
+        const defaultTags = [
+            { id: 1, name: "<html>", category: "Structure", desc: "HTML စာမျက်နှာတစ်ခုလုံး၏ အဓိက Root Element ဖြစ်သည်", code: '<html lang="en">\n  ...\n</html>' },
+            { id: 2, name: "<head>", category: "Structure", desc: "Page Info, Title, CSS လင့်ခ်များ ထည့်သွင်းသည့်နေရာ", code: "<head>\n  <title>My Title</title>\n</head>" },
+            { id: 3, name: "<body>", category: "Structure", desc: "ဝဘ်ဆိုဒ်ပေါ်တွင် တကယ်မြင်တွေ့ရမည့် Content များပါဝင်သည့်နေရာ", code: "<body>\n  <h1>Hello World</h1>\n</body>" },
+            { id: 4, name: "<h1> to <h6>", category: "Text", desc: "ခေါင်းစဉ်များ (h1 သည် အကြီးဆုံး၊ h6 သည် အသေးဆုံး)", code: "<h1>အဓိက ခေါင်းစဉ်</h1>\n<h2>ခေါင်းစဉ်ခွဲ</h2>" },
+            { id: 5, name: "<p>", category: "Text", desc: "စာပိုဒ်များ (Paragraphs) ရေးသားရန် သုံးသည်", code: "<p>ဒါကတော့ စာပိုဒ်တစ်ခု ဖြစ်ပါတယ်...</p>" },
+            { id: 6, name: "<strong>", category: "Text", desc: "စာသားကို အက္ခရာအထူ (Bold) ပြုလုပ်ပြီး အရေးကြီးကြောင်း ပြသသည်", code: "<strong>အရေးကြီးသော စာသား</strong>" },
+            { id: 7, name: "<a>", category: "Media", desc: "အခြား Page သို့မဟုတ် Link သို့ ချိတ်ဆက်ပေးသည်", code: '<a href="https://google.com">Google သို့သွားရန်</a>' },
+            { id: 8, name: "<img>", category: "Media", desc: "ဓာတ်ပုံများ ထည့်သွင်းပြသသည် (Self-closing tag)", code: '<img src="image.jpg" alt="ပုံဖော်ပြချက်">' },
+            { id: 9, name: "<ul> & <li>", category: "List & Table", desc: "အစဉ်လိုက်မဟုတ်သော (Unordered List) အစက်စက် စာရင်းပြရန်", code: "<ul>\n  <li>အချက် ၁</li>\n  <li>အချက် ၂</li>\n</ul>" },
+            { id: 10, name: "<form>", category: "Form", desc: "အသုံးပြုသူထံမှ အချက်အလက်များ တောင်းယူရန် Container", code: '<form action="/submit">\n  <input type="text">\n</form>' },
+            { id: 11, name: "<input>", category: "Form", desc: "အချက်အလက် ရိုက်ထည့်နိုင်သော Field (Text, Password, Checkbox စသည်)", code: '<input type="text" placeholder="အမည်ရိုက်ပါ">' },
+            { id: 12, name: "<button>", category: "Form", desc: "နှိပ်နိုင်သော ခလုတ် ပြုလုပ်သည်", code: '<button type="submit">Submit</button>' }
+        ];
+
+        // App State
+        let tags = JSON.parse(localStorage.getItem('html_cheat_tags')) || defaultTags;
+        let selectedCategory = 'All';
+
+        // Category Colors Mapping
+        const catColors = {
+            'Structure': 'bg-blue-500/10 text-blue-600 dark:text-blue-400 border-blue-200 dark:border-blue-900',
+            'Text': 'bg-emerald-500/10 text-emerald-600 dark:text-emerald-400 border-emerald-200 dark:border-emerald-900',
+            'Media': 'bg-purple-500/10 text-purple-600 dark:text-purple-400 border-purple-200 dark:border-purple-900',
+            'Form': 'bg-amber-500/10 text-amber-600 dark:text-amber-400 border-amber-200 dark:border-amber-900',
+            'List & Table': 'bg-pink-500/10 text-pink-600 dark:text-pink-400 border-pink-200 dark:border-pink-900'
+        };
+
+        // DOM Elements
+        const tagsGrid = document.getElementById('tagsGrid');
+        const searchInput = document.getElementById('searchInput');
+        const categoryFilters = document.getElementById('categoryFilters');
+        const emptyState = document.getElementById('emptyState');
+        const themeToggle = document.getElementById('themeToggle');
+        
+        // Modal DOM
+        const tagModal = document.getElementById('tagModal');
+        const addTagBtn = document.getElementById('addTagBtn');
+        const closeModal = document.getElementById('closeModal');
+        const cancelBtn = document.getElementById('cancelBtn');
+        const tagForm = document.getElementById('tagForm');
+
+        // Theme Toggle Logic
+        if (window.matchMedia('(prefers-color-scheme: dark)').matches) {
+            document.documentElement.classList.add('dark');
+        }
+        themeToggle.addEventListener('click', () => {
+            document.documentElement.classList.toggle('dark');
+        });
+
+        // Save to LocalStorage
+        function saveTags() {
+            localStorage.setItem('html_cheat_tags', JSON.stringify(tags));
+        }
+
+        // Render Filter Buttons
+        function renderFilters() {
+            const categories = ['All', 'Structure', 'Text', 'Media', 'Form', 'List & Table'];
+            categoryFilters.innerHTML = categories.map(cat => `
+                <button onclick="setCategory('${cat}')" class="px-4 py-2 rounded-xl text-xs font-semibold whitespace-nowrap transition ${
+                    selectedCategory === cat 
+                    ? 'bg-orange-500 text-white shadow-sm' 
+                    : 'bg-white dark:bg-slate-800 text-slate-600 dark:text-slate-400 border border-slate-200 dark:border-slate-700 hover:bg-slate-100 dark:hover:bg-slate-700'
+                }">
+                    ${cat}
+                </button>
+            `).join('');
+        }
+
+        function setCategory(cat) {
+            selectedCategory = cat;
+            renderFilters();
+            renderTags();
+        }
+
+        // Render Tag Cards
+        function renderTags() {
+            const search = searchInput.value.toLowerCase();
+            const filtered = tags.filter(tag => {
+                const matchesSearch = tag.name.toLowerCase().includes(search) || tag.desc.toLowerCase().includes(search);
+                const matchesCat = selectedCategory === 'All' || tag.category === selectedCategory;
+                return matchesSearch && matchesCat;
+            });
+
+            if (filtered.length === 0) {
+                tagsGrid.innerHTML = '';
+                emptyState.classList.remove('hidden');
+                return;
+            }
+
+            emptyState.classList.add('hidden');
+            tagsGrid.innerHTML = filtered.map(tag => `
+                <div class="bg-white dark:bg-slate-800 rounded-2xl border border-slate-200/80 dark:border-slate-700/80 p-5 shadow-sm hover:shadow-md transition flex flex-col justify-between group relative">
+                    <div>
+                        <!-- Header Tag Name & Category -->
+                        <div class="flex justify-between items-start mb-3">
+                            <span class="font-mono text-base font-bold text-orange-600 dark:text-orange-400 bg-orange-500/10 px-2.5 py-1 rounded-lg">
+                                ${escapeHtml(tag.name)}
+                            </span>
+                            <span class="text-[10px] uppercase tracking-wider font-bold px-2.5 py-1 rounded-full border ${catColors[tag.category] || 'bg-slate-100 text-slate-600'}">
+                                ${tag.category}
+                            </span>
+                        </div>
+                        
+                        <!-- Description -->
+                        <p class="text-xs text-slate-600 dark:text-slate-300 leading-relaxed mb-4">
+                            ${tag.desc}
+                        </p>
+                    </div>
+
+                    <div>
+                        <!-- Code Snippet Box -->
+                        ${tag.code ? `
+                        <div class="relative bg-slate-900 rounded-xl p-3 mb-3 text-slate-200 font-mono text-xs overflow-x-auto group/code">
+                            <pre><code>${escapeHtml(tag.code)}</code></pre>
+                            <button onclick="copyCode(\`${escapeJsString(tag.code)}\`)" class="absolute top-2 right-2 p-1.5 rounded-lg bg-slate-800 text-slate-400 hover:text-white opacity-0 group-hover/code:opacity-100 transition text-[10px] flex items-center space-x-1">
+                                <i class="fa-regular fa-copy"></i>
+                                <span>Copy</span>
+                            </button>
+                        </div>
+                        ` : ''}
+
+                        <!-- Actions (Edit/Delete) -->
+                        <div class="flex justify-end space-x-2 pt-2 border-t border-slate-100 dark:border-slate-700/50">
+                            <button onclick="editTag(${tag.id})" class="text-slate-400 hover:text-slate-600 dark:hover:text-slate-200 text-xs px-2 py-1 rounded">
+                                <i class="fa-solid fa-pen"></i>
+                            </button>
+                            <button onclick="deleteTag(${tag.id})" class="text-slate-400 hover:text-red-500 text-xs px-2 py-1 rounded">
+                                <i class="fa-solid fa-trash"></i>
+                            </button>
+                        </div>
+                    </div>
+                </div>
+            `).join('');
+        }
+
+        // Escape HTML for safe rendering
+        function escapeHtml(text) {
+            return text.replace(/&/g, "&amp;").replace(/</g, "&lt;").replace(/>/g, "&gt;");
+        }
+
+        function escapeJsString(str) {
+            return str.replace(/\\/g, '\\\\').replace(/`/g, '\\`').replace(/\$/g, '\\$');
+        }
+
+        // Copy Code Toast
+        function copyCode(text) {
+            navigator.clipboard.writeText(text);
+            showToast("Code များကို Copy ကူးယူပြီးပါပြီ!");
+        }
+
+        function showToast(msg) {
+            const toast = document.getElementById('toast');
+            document.getElementById('toastMsg').innerText = msg;
+            toast.classList.remove('translate-y-20', 'opacity-0');
+            setTimeout(() => {
+                toast.classList.add('translate-y-20', 'opacity-0');
+            }, 2500);
+        }
+
+        // Modal Controls
+        addTagBtn.addEventListener('click', () => {
+            tagForm.reset();
+            document.getElementById('tagId').value = '';
+            document.getElementById('modalTitle').innerText = 'Tag အသစ်ဖြည့်သွင်းရန်';
+            tagModal.classList.remove('hidden');
+        });
+
+        closeModal.addEventListener('click', () => tagModal.classList.add('hidden'));
+        cancelBtn.addEventListener('click', () => tagModal.classList.add('hidden'));
+
+        // Add or Edit Tag Form Submit
+        tagForm.addEventListener('submit', (e) => {
+            e.preventDefault();
+            const id = document.getElementById('tagId').value;
+            const name = document.getElementById('tagName').value.trim();
+            const category = document.getElementById('tagCategory').value;
+            const desc = document.getElementById('tagDesc').value.trim();
+            const code = document.getElementById('tagCode').value.trim();
+
+            if (id) {
+                // Update
+                tags = tags.map(t => t.id == id ? { id: Number(id), name, category, desc, code } : t);
+                showToast("Tag ကို ပြင်ဆင်ပြီးပါပြီ!");
+            } else {
+                // Add New
+                const newTag = {
+                    id: Date.now(),
+                    name,
+                    category,
+                    desc,
+                    code
+                };
+                tags.unshift(newTag);
+                showToast("Tag အသစ် ထည့်သွင်းပြီးပါပြီ!");
+            }
+
+            saveTags();
+            renderTags();
+            tagModal.classList.add('hidden');
+        });
+
+        // Edit Tag
+        window.editTag = function(id) {
+            const tag = tags.find(t => t.id === id);
+            if (!tag) return;
+
+            document.getElementById('tagId').value = tag.id;
+            document.getElementById('tagName').value = tag.name;
+            document.getElementById('tagCategory').value = tag.category;
+            document.getElementById('tagDesc').value = tag.desc;
+            document.getElementById('tagCode').value = tag.code || '';
+
+            document.getElementById('modalTitle').innerText = 'Tag ကို ပြင်ဆင်ရန်';
+            tagModal.classList.remove('hidden');
+        };
+
+        // Delete Tag
+        window.deleteTag = function(id) {
+            if (confirm("ဒီ Tag ကို ဖျက်ရန် သေချာပါသလား?")) {
+                tags = tags.filter(t => t.id !== id);
+                saveTags();
+                renderTags();
+                showToast("Tag ကို ဖျက်လိုက်ပါပြီ");
+            }
+        };
+
+        // Search Input Listener
+        searchInput.addEventListener('input', renderTags);
+
+        // Initial Initialization
+        renderFilters();
+        renderTags();
+    </script>
+</body>
+</html>
