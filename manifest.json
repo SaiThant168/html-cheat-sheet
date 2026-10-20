@@ -1,0 +1,21 @@
+{
+  "id": "./",
+  "name": "HTML Cheat Sheet",
+  "short_name": "HTML Notes",
+  "description": "HTML Tag များကို ရှာဖွေ၊ လေ့လာ၊ မှတ်သားရန်",
+  "lang": "my",
+  "start_url": "./",
+  "scope": "./",
+  "display": "standalone",
+  "orientation": "portrait",
+  "background_color": "#f8fafc",
+  "theme_color": "#f97316",
+  "icons": [
+    {
+      "src": "./icon.svg",
+      "sizes": "any",
+      "type": "image/svg+xml",
+      "purpose": "any"
+    }
+  ]
+}
