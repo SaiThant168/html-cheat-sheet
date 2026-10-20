@@ -152,6 +152,12 @@
         // App State
         let tags = JSON.parse(localStorage.getItem('html_cheat_tags')) || defaultTags;
         let selectedCategory = 'All';
+        const htmlTag = tags.find(tag => tag.name === "<html>");
+        
+if (htmlTag) {
+  htmlTag.code = '<html lang="en">\n  ...\n</html>';
+  localStorage.setItem('html_cheat_tags', JSON.stringify(tags));
+}
 
         // Category Colors Mapping
         const catColors = {
