@@ -4,7 +4,9 @@ const APP_FILES = [
   "./",
   "./index.html",
   "./manifest.json",
-  "./icon.svg"
+  "./icon.svg",
+  "./icon-192.png",
+  "./icon-512.png"
 ];
 
 // Install: လိုအပ်သော App ဖိုင်များကို သိမ်းမည်
