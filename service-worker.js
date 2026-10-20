@@ -1,4 +1,4 @@
-const CACHE_NAME = "html-cheat-sheet-pwa-v1";
+const CACHE_NAME = "html-cheat-sheet-pwa-v2";
 
 const APP_FILES = [
   "./",
