@@ -255,7 +255,7 @@ if (htmlTag) {
                         ${tag.code ? `
                         <div class="relative bg-slate-900 rounded-xl p-3 mb-3 text-slate-200 font-mono text-xs overflow-x-auto group/code">
                             <pre><code>${escapeHtml(tag.code)}</code></pre>
-                            <button onclick="copyCode(\`${escapeJsString(tag.code)}\`)" class="absolute top-2 right-2 p-1.5 rounded-lg bg-slate-800 text-slate-400 hover:text-white opacity-0 group-hover/code:opacity-100 transition text-[10px] flex items-center space-x-1">
+                            <button onclick="copyCodeById(${tag.id})" class="absolute top-2 right-2 p-1.5 rounded-lg bg-slate-800 text-slate-400 hover:text-white opacity-0 group-hover/code:opacity-100 transition text-[10px] flex items-center space-x-1">
                                 <i class="fa-regular fa-copy"></i>
                                 <span>Copy</span>
                             </button>
@@ -290,6 +290,14 @@ if (htmlTag) {
             navigator.clipboard.writeText(text);
             showToast("Code များကို Copy ကူးယူပြီးပါပြီ!");
         }
+        
+function copyCodeById(id) {
+    const tag = tags.find(t => t.id === id);
+
+    if (tag) {
+        copyCode(tag.code || '');
+    }
+}
 
         function showToast(msg) {
             const toast = document.getElementById('toast');
